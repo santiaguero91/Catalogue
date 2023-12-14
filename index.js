@@ -3,7 +3,7 @@ must be configurate in app.js
 
 */
 
-const server = require("./app.js");
+const server = require("./src/app.js");
 
 require("dotenv").config();
 
