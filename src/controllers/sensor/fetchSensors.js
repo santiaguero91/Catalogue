@@ -45,7 +45,6 @@ const minifyRecord = (record) => {
   let humidityAccuracy = parseFloat(record?.fields["Humidity Accuracy"]);
   let tempResolution = parseFloat(record?.fields["Temp Resolution"]);
   let humidityResolution = parseFloat(record?.fields["Humidity Resolution"]);
-
   return {
     id: record?.id,
     sku: record?.fields.SKU,
@@ -111,8 +110,8 @@ const fetchSensors = async (req, res) => {
         );
       return allRecords;
     };
-
     const result = await getRecords();
+    console.log(result.length);
     res.status(200).json(result);
   } catch (err) {
     res.status(400).json({ message: err.message });
