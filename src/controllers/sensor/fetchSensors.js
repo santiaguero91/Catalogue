@@ -54,12 +54,10 @@ const minifyRecord = (record) => {
     clasification: record?.fields.Clasification,
     useCase: record?.fields["Use Case"],
     outdoorIndoor: record?.fields["Outdoor/indoor"],
-
     tempAccuracy,
     humidityAccuracy,
     tempResolution,
     humidityResolution,
-
     measuringRange,
     operatingTemperature,
     operatingHumidity,
@@ -86,32 +84,46 @@ let allRecords = [];
 const fetchSensors = async (req, res) => {
   try {
     const getRecords = async () => {
-      if (allRecords.length > 1) {
+      if (allRecords.length > 0) {
         return allRecords;
       }
 
-      table
-        .select({
-          view: "Grid view",
-        })
-        .eachPage(
-          function page(records, fetchNextPage) {
-            records.forEach(function (record) {
-              allRecords.push(minifyRecord(record));
-            });
-            fetchNextPage();
-          },
-          function done(err) {
-            if (err) {
-              console.error(err);
-              return;
+      const fetchPage = (pageNumber) =>
+        new Promise((resolve, reject) => {
+          table.select({
+            view: "Grid view",
+            pageSize: 100,
+            page: pageNumber,
+          }).eachPage(
+            (records, fetchNextPage) => {
+              records.forEach((record) => {
+                allRecords.push(minifyRecord(record));
+              });
+              fetchNextPage();
+            },
+            (err) => {
+              if (err) {
+                reject(err);
+              } else {
+                resolve();
+              }
             }
-          }
-        );
+          );
+        });
+
+      let pageNumber = 0;
+      while (true) {
+        await fetchPage(pageNumber);
+        if (!allRecords.length || allRecords.length % 100 !== 0) {
+          break;
+        }
+        pageNumber++;
+      }
+
       return allRecords;
     };
+
     const result = await getRecords();
-    console.log(result.length);
     res.status(200).json(result);
   } catch (err) {
     res.status(400).json({ message: err.message });

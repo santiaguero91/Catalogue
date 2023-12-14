@@ -14,6 +14,7 @@ server.listen(process.env.PORT, async () => {
         const res = {
             status: (code) => ({ json: (data) => console.log(`Response with status ${code}:`, data) }),
         };
+
         await fetchSensors(req, res);
         console.log(`Listening at: http://localhost:${process.env.PORT}/`);
     } catch (error) {
