@@ -45,6 +45,24 @@ const minifyRecord = (record) => {
   let humidityAccuracy = parseFloat(record?.fields["Humidity Accuracy"]);
   let tempResolution = parseFloat(record?.fields["Temp Resolution"]);
   let humidityResolution = parseFloat(record?.fields["Humidity Resolution"]);
+
+  const parseNumber = (value) => {
+    if (value === undefined || value === null || isNaN(value)) {
+      return null;
+    }
+    let parsedValue = parseFloat(value.replace(/,/g, ''));
+      parsedValue = parseFloat(parsedValue.toFixed(2));
+  
+    return parsedValue;
+  };
+
+  let priceWesco = parseNumber(record?.fields["Price Wesco"]);
+  let pricePartner510sensors = parseNumber(record?.fields["Price Partner 5 - 10 sensors"]);
+  let pricePartner1125sensors = parseNumber(record?.fields["Price Partner 11 - 25 sensors"]);
+  let pricePartner2650sensors = parseNumber(record?.fields["Price Partner 26 - 50 sensors"]);
+  let costUSDMiami = parseNumber(record?.fields["Cost USD Miami"]);
+
+
   return {
     id: record?.id,
     sku: record?.fields.SKU,
@@ -65,11 +83,12 @@ const minifyRecord = (record) => {
     connectivity: record?.fields.Connectivity,
     resolution: record?.fields.Resolution,
     accuracy: record?.fields.Accuracy,
-    priceWesco: record?.fields["Price Wesco"],
-    costUSDMiami: record?.fields["Cost USD Miami"],
-    price5to10: record?.fields["Price Partner 5 - 10 sensors"],
-    price11to25: record?.fields["Price Partner 11 - 25 sensors"],
-    price26to50: record?.fields["Price Partner 26 - 50 sensors"],
+    priceWesco: priceWesco,
+    costUSDMiami: costUSDMiami,
+    price5to10: pricePartner510sensors,
+    price11to25: pricePartner1125sensors,
+    price26to50:pricePartner2650sensors,
+
     minOperatingHumidity,
     maxOperatingHumidity,
     minOperatingTemperature,
