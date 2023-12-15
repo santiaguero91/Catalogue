@@ -61,7 +61,7 @@ const minifyRecord = (record) => {
   let pricePartner1125sensors = parseNumber(record?.fields["Price Partner 11 - 25 sensors"]);
   let pricePartner2650sensors = parseNumber(record?.fields["Price Partner 26 - 50 sensors"]);
   let costUSDMiami = parseNumber(record?.fields["Cost USD Miami"]);
-
+console.log(costUSDMiami);
 
   return {
     id: record?.id,
