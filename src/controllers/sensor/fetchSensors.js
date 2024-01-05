@@ -61,7 +61,9 @@ const minifyRecord = (record) => {
   let pricePartner1125sensors = parseNumber(record?.fields["Price Partner 11 - 25 sensors"]);
   let pricePartner2650sensors = parseNumber(record?.fields["Price Partner 26 - 50 sensors"]);
   let costUSDMiami = parseNumber(record?.fields["Cost USD Miami"]);
-console.log(costUSDMiami);
+
+  let clasification = record?.fields.Clasification;
+  clasification = clasification ? clasification.split(" / ") : [];
 
   return {
     id: record?.id,
@@ -69,7 +71,7 @@ console.log(costUSDMiami);
     brand: record?.fields.Brand,
     productName: record?.fields["Product Name"],
     description: record?.fields.Description,
-    clasification: record?.fields.Clasification,
+    clasification: clasification,
     useCase: record?.fields["Use Case"],
     outdoorIndoor: record?.fields["Outdoor/indoor"],
     tempAccuracy,
